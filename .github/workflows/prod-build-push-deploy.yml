@@ -18,7 +18,7 @@ on:
       - p
 
 env:
-  REGION: "us-east1-a"
+  REGION: "us-east1"
   CLUSTER: "simple-app-p"
   NAMESPACE: ${{ github.event.inputs.namespace }}
   TAG: "prod"
@@ -59,6 +59,6 @@ jobs:
 
       - name: Deploy to GKE
         run: |
-          gcloud container clusters get-credentials $CLUSTER --zone $REGION
-          kubectl apply -f deployment.yml --namespace $NAMESPACE
+          gcloud container clusters get-credentials ${{ env.CLUSTER }} --zone ${{ env.REGION }}
+          kubectl apply -f deployment.yml --namespace ${{ env.NAMESPACE }}
           kubectl set image deployment/simple-webapp simple-webapp=${{ secrets.DOCKERHUB_USERNAME }}/simple-webapp:${{ env.TAG }}-${{ env.NAMESPACE}}-${{ github.sha }} --namespace $NAMESPACE
