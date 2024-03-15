@@ -1,4 +1,4 @@
-name: Build and Push to Staging
+name: Build, Push and Deploy to Staging
 
 on:
   workflow_dispatch:
