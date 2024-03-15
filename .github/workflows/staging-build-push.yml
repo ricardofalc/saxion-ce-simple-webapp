@@ -2,6 +2,7 @@ name: Build and Push to Staging
 
 on:
   workflow_dispatch:
+
   push:
     branches:
       - ta
@@ -14,8 +15,8 @@ on:
 env:
   REGION: "us-east1-a"
   CLUSTER: "simple-app-ta"
-  NAMESPACE: "simple-app-ta"
-  TAG: "staging-${{ github.sha }}"
+  NAMESPACE: "staging"
+  TAG: "staging"
 
 jobs:
   build:
@@ -23,14 +24,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build the Docker image
-        run: docker-compose build --no-cache --force-rm
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -38,9 +31,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push scooters_db image
+      - name: Build and push simple-webapp image
         uses: docker/build-push-action@v5
         with:
-          context: ./scooters_db
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/scooters_db:${{ env.TAG }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/simple-webapp:${{ env.TAG }}-${{ github.sha }}

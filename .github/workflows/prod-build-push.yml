@@ -21,7 +21,7 @@ env:
   REGION: "us-east1-a"
   CLUSTER: "simple-app-p"
   NAMESPACE: ${{ github.event.inputs.namespace }}
-  TAG: "production-${{ github.sha }}"
+  TAG: "prod"
 
 jobs:
   build:
@@ -40,4 +40,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/simple-webapp:${{ env.TAG }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/simple-webapp:${{ env.TAG }}-${{ env.NAMESPACE}}-${{ github.sha }}
